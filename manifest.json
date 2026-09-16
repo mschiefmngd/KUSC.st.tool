@@ -1,0 +1,17 @@
+{
+  "name": "역량을 전략적으로",
+  "short_name": "전략 진단",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#DEDACF",
+  "theme_color": "#FDFCF7",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23FDFCF7'/%3E%3Cpolygon points='256,96 395,176 395,336 256,416 117,336 117,176' fill='none' stroke='%232F5BD0' stroke-width='28'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
