@@ -1,14 +1,14 @@
 {
-  "name": "역량을 전략적으로",
-  "short_name": "전략 진단",
+  "name": "KUSC 전략 직무 진출 커리큘럼",
+  "short_name": "KUSC 전략",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#DEDACF",
-  "theme_color": "#FDFCF7",
+  "background_color": "#F2F4F6",
+  "theme_color": "#FFFFFF",
   "lang": "ko",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23FDFCF7'/%3E%3Cpolygon points='256,96 395,176 395,336 256,416 117,336 117,176' fill='none' stroke='%232F5BD0' stroke-width='28'/%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%23036B3F'/%3E%3Cpolygon points='256,110 382,183 382,329 256,402 130,329 130,183' fill='none' stroke='%23fff' stroke-width='30'/%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>하프의 7년 · 누가, 언제, 왜 불려오는가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#F2F4F6; --card:#FFFFFF; --ink:#191F28; --sub:#4E5968; --mute:#8B95A1;
+  --line:#E5E8EB; --soft:#F6F7F9; --ku:#036B3F; --ku-soft:rgba(3,107,63,.10);
+  --skin:#FFDCC2; --hair:#3B2A22; --eye:#2A2A2A; --cheek:#FF9DA0;
+  --ground:#DDE1E6; --win:#BFDDFF; --wall:#FFFFFF; --wall2:#E3E9F0; --roof:#036B3F; --edge:#C9CFD6;
+  --shadow:0 1px 2px rgba(0,23,51,.04),0 8px 28px rgba(0,23,51,.07);
+  --emoji:"Tossface","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#101113; --card:#1B1D21; --ink:#F2F4F6; --sub:#B0B8C1; --mute:#7E8792;
+    --line:#2C2F35; --soft:#23262B; --ku:#3DBE84; --ku-soft:rgba(61,190,132,.14);
+    --ground:#2A2D33; --win:#3B5876; --wall:#E9EDF1; --wall2:#C9D0D7; --roof:#2FA36E; --edge:transparent;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --page:#101113; --card:#1B1D21; --ink:#F2F4F6; --sub:#B0B8C1; --mute:#7E8792;
+  --line:#2C2F35; --soft:#23262B; --ku:#3DBE84; --ku-soft:rgba(61,190,132,.14);
+  --ground:#2A2D33; --win:#3B5876; --wall:#E9EDF1; --wall2:#C9D0D7; --roof:#2FA36E; --edge:transparent;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.35);
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*:before,*:after{box-sizing:inherit;margin:0;padding:0}
+html,body{height:100%;background:var(--page);color:var(--ink);
+  font-family:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  letter-spacing:-.02em;-webkit-font-smoothing:antialiased;overflow:hidden;word-break:keep-all}
+.e{font-family:var(--emoji);letter-spacing:0;line-height:1}
+
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#canvas{width:1280px;height:720px;position:relative;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--card);border-radius:32px;box-shadow:var(--shadow);padding:34px 48px;display:none;overflow:hidden}
+.slide.on{display:block}
+
+/* 헤더 — 모든 장면에서 같은 자리 */
+.hud{display:flex;align-items:center;gap:12px;height:38px;margin-bottom:16px}
+.stage{display:inline-flex;align-items:center;gap:8px;background:var(--ku-soft);color:var(--ku);font-weight:800;font-size:15px;padding:8px 14px;border-radius:999px}
+.yr{font-size:16px;color:var(--sub);font-weight:700}
+.body{height:612px}
+
+h1{font-size:64px;font-weight:900;line-height:1.15;letter-spacing:-.04em}
+h2{font-size:34px;font-weight:900;line-height:1.25;letter-spacing:-.035em}
+h3{font-size:19px;font-weight:800;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.lead{font-size:19px;color:var(--sub);line-height:1.6;font-weight:500}
+
+.f{opacity:0;transition:opacity .35s ease}
+.f.in{opacity:1}
+
+/* 캐릭터 */
+.chr{display:block}
+.chr .sh{fill:var(--ground)}
+.chr .skin{fill:var(--skin)}
+.chr .hair{fill:var(--hair)}
+.chr .eye{fill:var(--eye)}
+.chr .ck{fill:var(--cheek);opacity:.55}
+.chr .mouth{fill:none;stroke:var(--eye);stroke-width:2.4;stroke-linecap:round}
+.chr .wht{fill:#FFFFFF}
+.chr .dk{fill:#2B3036}
+.chr .ln{fill:none;stroke:#2B3036;stroke-width:2.6}
+.face{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;overflow:hidden;flex-shrink:0}
+
+/* 캐릭터 소개 */
+.roster{height:520px;display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:26px}
+.rc{border-radius:24px;padding:26px 16px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--jbg)}
+.rc .chr{width:150px;height:175px}
+.rc-nick{font-size:13px;font-weight:800;color:var(--jc);margin-top:6px}
+.rc-name{font-size:26px;font-weight:900;margin-top:2px}
+.rc-one{font-size:15px;color:var(--sub);line-height:1.55;font-weight:600;margin-top:10px;min-height:72px}
+.rc-q{margin-top:auto;background:var(--card);border-radius:14px;padding:11px 12px;width:100%;font-size:14.5px;font-weight:800;line-height:1.45}
+.rc-q small{display:block;font-size:11.5px;color:var(--jc);font-weight:800;margin-bottom:3px}
+
+/* 월드맵 */
+.map{position:relative;margin-top:20px;height:440px}
+.map svg.path{position:absolute;inset:0}
+.node{position:absolute;width:150px;text-align:center;transform:translate(-50%,-50%)}
+.node .disc{width:88px;height:88px;border-radius:28px;background:var(--soft);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:inset 0 0 0 3px var(--line)}
+.node .y{font-size:13px;font-weight:800;color:var(--ku)}
+.node .t{font-size:16px;font-weight:800;margin-top:2px}
+
+/* ── 장면: 인트로 ── */
+.scene{display:grid;grid-template-columns:400px 1fr;gap:36px;height:100%}
+.co{background:var(--soft);border-radius:28px;padding:22px;display:flex;flex-direction:column;height:100%;overflow:hidden}
+.co-top{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px}
+.co-top .lvtag{margin-left:auto;font-size:13px;color:var(--ku);background:var(--ku-soft);padding:5px 11px;border-radius:99px;font-weight:800}
+.town{flex:1;display:flex;align-items:center;justify-content:center;margin-top:8px}
+.town svg{width:100%;height:auto;display:block}
+.cap{font-size:16px;font-weight:800;text-align:center;line-height:1.45;margin:12px 6px 14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--card);border-radius:16px;padding:11px 12px}
+.stat small{display:block;font-size:12px;color:var(--mute);font-weight:700}
+.stat b{font-size:18px;font-weight:900;letter-spacing:-.03em;white-space:nowrap}
+
+.right{display:flex;flex-direction:column;height:100%}
+.sit h2{margin-bottom:16px}
+.sit ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.sit li{font-size:17.5px;line-height:1.5;color:var(--sub);padding-left:20px;position:relative;font-weight:500}
+.sit li:before{content:"";position:absolute;left:4px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--mute)}
+.sit li b{color:var(--ink);font-weight:800}
+.ask{margin-top:auto;height:236px;display:flex;flex-direction:column}
+.ask h3{margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:16px;background:var(--soft);font-weight:800;font-size:16px;border:2px solid transparent;transition:all .3s}
+.chip .face{width:36px;height:36px;border-radius:11px}
+.chip.win{border-color:var(--jc);background:var(--jbg);transform:scale(1.05)}
+.chip.lose{opacity:.3}
+.stamp{display:none;font-size:12px;font-weight:800;color:#fff;background:var(--jc);padding:3px 8px;border-radius:99px}
+.chip.win .stamp{display:inline-block}
+.why{margin-top:auto;min-height:74px;background:var(--jbg);border-radius:18px;padding:14px 18px;font-size:16px;line-height:1.55;font-weight:600;display:flex;align-items:center}
+.why b{color:var(--jc);font-weight:800}
+
+/* ── 장면: 투입 ── */
+.work{display:grid;grid-template-columns:300px 1fr;gap:32px;height:100%}
+.who{background:var(--jbg);border-radius:28px;padding:22px;display:flex;flex-direction:column;align-items:center;text-align:center;height:100%}
+.who .chr{width:170px;height:198px;margin-top:6px}
+.who-nick{font-size:13.5px;font-weight:800;color:var(--jc);margin-top:6px}
+.who-name{font-size:30px;font-weight:900;letter-spacing:-.04em}
+.side{display:inline-block;font-size:13px;font-weight:800;color:#fff;background:var(--jc);padding:5px 12px;border-radius:99px;margin-top:8px}
+.kq{margin-top:auto;background:var(--card);border-radius:18px;padding:14px 16px;width:100%;text-align:left}
+.kq small{display:block;font-size:12px;font-weight:800;color:var(--jc);margin-bottom:4px}
+.kq p{font-size:17px;font-weight:800;line-height:1.45}
+
+.wr{display:flex;flex-direction:column;height:100%}
+.wr h3{height:30px;margin-bottom:10px}
+.steps{height:362px;display:flex;flex-direction:column;gap:3px}
+.st{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:center;padding:0 14px;border-radius:14px;flex:1}
+.st:nth-child(odd){background:var(--soft)}
+.st .n{width:28px;height:28px;border-radius:9px;background:var(--jc);color:#fff;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center}
+.st .t{font-size:16px;font-weight:800;line-height:1.3}
+.st .d{font-size:14px;color:var(--sub);line-height:1.4;margin-top:1px}
+.bottom{margin-top:12px;height:198px;display:grid;grid-template-columns:1.3fr 1fr 1.05fr;gap:12px}
+.bx{background:var(--soft);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column}
+.bx h4{font-size:14px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.bx ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.bx li{font-size:14px;color:var(--sub);line-height:1.4;padding-left:12px;position:relative;font-weight:500}
+.bx li:before{content:"";position:absolute;left:1px;top:8px;width:4px;height:4px;border-radius:50%;background:var(--mute)}
+.item{display:flex;align-items:center;gap:7px;background:var(--card);border-radius:10px;padding:5px 10px;font-size:13.5px;font-weight:800;border:1.5px dashed var(--jc);margin-bottom:5px}
+.bx.res{background:var(--ku-soft)}
+.bx.res h4{color:var(--ku)}
+.bx.res p{font-size:15.5px;font-weight:800;line-height:1.55}
+
+/* 편 맞히기 */
+.sides{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+.sc{border-radius:26px;padding:20px 22px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--jbg)}
+.sc .chr{width:140px;height:163px}
+.sc-n{font-size:26px;font-weight:900}
+.sc-q{width:100%;height:56px;border-radius:16px;background:var(--card);border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--mute);position:relative;margin-top:4px}
+.sc-q .f{position:absolute;inset:-2px;border-radius:16px;background:var(--jc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
+.sc-d{font-size:15.5px;color:var(--sub);line-height:1.5;font-weight:600;min-height:48px}
+.foot{margin-top:18px;font-size:17px;font-weight:700;color:var(--sub);text-align:center}
+
+/* 이중 투입 */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;height:100%}
+.dc{background:var(--jbg);border-radius:26px;padding:18px 22px;display:flex;flex-direction:column}
+.dc-top{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.dc-top .chr{width:84px;height:98px}
+.dc-n{font-size:24px;font-weight:900}
+.dc-s{font-size:14px;font-weight:800;color:var(--jc)}
+.dc .kq{margin:0 0 10px}
+.dc .steps{height:auto;flex:1}
+.dc .st{background:var(--card)!important;padding:10px 14px}
+
+/* 삼각 */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+.tq{border-radius:26px;padding:20px 22px 26px;background:var(--jbg);text-align:center;display:flex;flex-direction:column;align-items:center}
+.tq .chr{width:130px;height:152px}
+.tq small{font-size:14px;font-weight:800;color:var(--jc);margin-top:6px}
+.tq p{font-size:32px;font-weight:900;letter-spacing:-.04em;margin-top:4px}
+.banner{display:inline-flex;align-items:center;gap:10px;background:var(--ku);color:#fff;font-weight:900;font-size:20px;padding:14px 22px;border-radius:18px;margin-top:22px}
+.banner.soft{background:var(--ku-soft);color:var(--ku)}
+
+/* 시간 지도 */
+.tl{position:relative;margin-top:40px;display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.tl:before{content:"";position:absolute;left:5%;right:5%;top:46px;height:6px;border-radius:9px;background:var(--line)}
+.tn{position:relative;text-align:center}
+.tn .disc{width:96px;height:96px;margin:0 auto;border-radius:30px;background:var(--card);box-shadow:inset 0 0 0 3px var(--line);display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;z-index:1}
+.tn .y{margin-top:12px;font-size:13px;color:var(--ku);font-weight:800}
+.tn .t{font-size:16px;font-weight:800;margin-top:3px}
+.tn .ppl{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;margin-top:12px}
+.tn .ppl .face{width:46px;height:46px;border-radius:14px}
+.tn .nm{font-size:12.5px;font-weight:800;color:var(--sub);margin-top:6px;line-height:1.4}
+
+/* 마지막 */
+.oq{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.oqc{background:var(--soft);border-radius:24px;padding:28px 28px;display:flex;gap:18px;align-items:flex-start;min-height:150px}
+.oqc .e{font-size:36px}
+.oqc p{font-size:22px;font-weight:800;line-height:1.45}
+.oqc span{display:block;font-size:16px;color:var(--sub);font-weight:600;margin-top:6px;line-height:1.5}
+
+.brand{position:absolute;top:42px;right:48px;font-size:12.5px;font-weight:700;color:var(--mute);letter-spacing:-.01em}
+#bar{position:fixed;left:0;right:0;bottom:0;height:4px;z-index:9}
+#bar i{display:block;height:100%;background:var(--ku);width:0;transition:width .3s}
+#num{position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);font-size:12.5px;font-weight:700;color:var(--mute);z-index:9}
+#note{position:fixed;left:0;right:0;bottom:0;background:#191F28;color:#fff;padding:18px 26px calc(env(safe-area-inset-bottom,0px) + 18px);font-size:15px;line-height:1.7;display:none;z-index:10}
+#note b{color:#7FD0A8;margin-right:8px}
+#hint{position:fixed;left:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);font-size:12px;color:var(--mute);font-weight:600;z-index:9}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="canvas"></div></div>
+<div id="bar"><i></i></div>
+<div id="num"></div>
+<div id="hint"><a href="./" style="color:inherit;text-decoration:none;font-weight:800;margin-right:10px">← KUSC 홈</a>← → 넘기기 · N 발표 노트 · F 전체화면</div>
+<div id="note"></div>
+
+<script>
+/* ───────── 캐릭터 ───────── */
+const J={
+  NO:{n:"창업자",nick:"만능 창업자",c:"#7A8591"},
+  VC:{n:"VC",nick:"가능성 사냥꾼",c:"#FF7A1A"},
+  PM:{n:"PM",nick:"제품 선장",c:"#F04452"},
+  BP:{n:"사업기획",nick:"회사 살림꾼",c:"#D99A00"},
+  CS:{n:"컨설팅",nick:"문제 탐정",c:"#00A3A3"},
+  PE:{n:"PE",nick:"회사 리모델러",c:"#7B61FF"},
+  IB:{n:"IB",nick:"거래 설계자",c:"#3182F6"}
+};
+const ORDER=["NO","VC","PM","BP","CS","PE","IB"];
+const jv=k=>`--jc:${J[k].c};--jbg:${J[k].c}1F`;
+const chipName=k=>k==="NO"?"아무도 안 부른다":J[k].n;
+
+/* 공통 얼굴 */
+function faceParts(){
+  return `<circle class="skin" cx="60" cy="54" r="30"/>
+  <circle class="eye" cx="50" cy="57" r="3.3"/><circle class="eye" cx="70" cy="57" r="3.3"/>
+  <ellipse class="ck" cx="43" cy="65" rx="5" ry="3"/><ellipse class="ck" cx="77" cy="65" rx="5" ry="3"/>
+  <path class="mouth" d="M53 68 Q60 74 67 68"/>`;
+}
+const HAIR=`<path class="hair" d="M30 52 Q30 22 60 22 Q90 22 90 52 Q84 36 62 36 Q44 36 36 46 Q33 49 30 52Z"/>`;
+/* 직무별 소품 */
+function props(k,c){
+  switch(k){
+  case "IB": return {head:HAIR,body:`<polygon points="60,82 54,90 60,118 66,90" fill="#1E3A8A"/><rect x="82" y="104" width="26" height="20" rx="4" fill="#7A5230"/><rect x="90" y="99" width="10" height="7" rx="2" fill="none" stroke="#7A5230" stroke-width="3"/>`};
+  case "PE": return {head:`<path d="M28 46 Q28 18 60 18 Q92 18 92 46Z" fill="#FFC531"/><rect x="22" y="43" width="76" height="8" rx="4" fill="#F2A900"/><rect x="56" y="18" width="8" height="25" rx="3" fill="#F2A900"/>`,
+     body:`<rect x="38" y="94" width="44" height="8" rx="3" fill="#FFC531" opacity=".9"/><rect x="38" y="108" width="44" height="8" rx="3" fill="#FFC531" opacity=".9"/>`};
+  case "VC": return {head:HAIR+`<rect x="30" y="38" width="60" height="6" rx="3" fill="#7A4B2A"/><circle cx="47" cy="40" r="9" fill="#9AD8FF" stroke="#7A4B2A" stroke-width="3"/><circle cx="73" cy="40" r="9" fill="#9AD8FF" stroke="#7A4B2A" stroke-width="3"/>`,
+     body:`<path d="M94 92 l6 -16 l6 16 l-6 -3z" fill="#F04452"/><rect x="96" y="90" width="8" height="24" rx="4" fill="#FFFFFF" stroke="#C9CFD6" stroke-width="1.5"/><path d="M96 112 l-4 8 h16 l-4 -8z" fill="#FFC531"/>`};
+  case "CS": return {head:HAIR+`<circle cx="50" cy="57" r="9" fill="none" stroke="#2B3036" stroke-width="2.6"/><circle cx="70" cy="57" r="9" fill="none" stroke="#2B3036" stroke-width="2.6"/><line x1="59" y1="57" x2="61" y2="57" stroke="#2B3036" stroke-width="2.6"/>`,
+     body:`<rect x="78" y="92" width="28" height="34" rx="4" fill="#F4E3C3"/><rect x="86" y="88" width="12" height="7" rx="2" fill="#8A8F96"/><line x1="83" y1="103" x2="101" y2="103" stroke="#B9A57E" stroke-width="2.4"/><line x1="83" y1="110" x2="101" y2="110" stroke="#B9A57E" stroke-width="2.4"/><line x1="83" y1="117" x2="95" y2="117" stroke="#B9A57E" stroke-width="2.4"/>`};
+  case "BP": return {head:HAIR+`<rect x="40" y="50" width="16" height="12" rx="3" fill="none" stroke="#2B3036" stroke-width="2.4"/><rect x="64" y="50" width="16" height="12" rx="3" fill="none" stroke="#2B3036" stroke-width="2.4"/><line x1="56" y1="55" x2="64" y2="55" stroke="#2B3036" stroke-width="2.4"/>`,
+     body:`<rect x="76" y="90" width="34" height="30" rx="5" fill="#FFFFFF"/><rect x="82" y="106" width="6" height="9" rx="1.5" fill="#3182F6"/><rect x="91" y="100" width="6" height="15" rx="1.5" fill="#F04452"/><rect x="100" y="95" width="6" height="20" rx="1.5" fill="#00A36C"/>`};
+  case "PM": return {head:`<path d="M28 48 Q28 20 60 20 Q92 20 92 48Z" fill="${c}"/><rect x="18" y="44" width="34" height="7" rx="3.5" fill="${c}"/><circle cx="60" cy="22" r="4" fill="#FFFFFF"/>`,
+     body:`<rect x="84" y="90" width="22" height="36" rx="5" fill="#2B3036"/><rect x="87" y="94" width="16" height="25" rx="2" fill="#9AD8FF"/><rect x="90" y="99" width="10" height="5" rx="1.5" fill="#FFFFFF"/><rect x="90" y="107" width="7" height="5" rx="1.5" fill="#FFFFFF"/>`};
+  default: return {head:`<ellipse cx="60" cy="27" rx="25" ry="15" fill="#FFFFFF" stroke="#D6DADF" stroke-width="2"/><circle cx="45" cy="24" r="10" fill="#FFFFFF"/><circle cx="75" cy="24" r="10" fill="#FFFFFF"/><rect x="38" y="30" width="44" height="12" rx="3" fill="#FFFFFF" stroke="#D6DADF" stroke-width="2"/>`,
+     body:`<rect x="44" y="90" width="32" height="30" rx="6" fill="#FFFFFF" opacity=".92"/><circle cx="96" cy="104" r="9" fill="#F7B3C2"/><path d="M88 106 h16 l-3 12 h-10z" fill="#C8A27A"/>`};
+  }
+}
+function chr(k){
+  const c=J[k].c, p=props(k,c);
+  return `<svg class="chr" viewBox="0 0 120 140" aria-hidden="true">
+    <ellipse class="sh" cx="60" cy="133" rx="36" ry="6"/>
+    <rect x="28" y="80" width="64" height="54" rx="26" fill="${c}"/>
+    ${p.body}${faceParts()}${p.head}</svg>`;
+}
+function face(k){
+  const c=J[k].c, p=props(k,c);
+  return `<span class="face" style="background:${c}26"><svg class="chr" viewBox="20 12 80 80" width="100%" height="100%" aria-hidden="true">
+    <rect x="28" y="80" width="64" height="54" rx="26" fill="${c}"/>${faceParts()}${p.head}</svg></span>`;
+}
+
+/* ───────── 회사 그림 ───────── */
+const G=186;
+const ED='stroke:var(--edge);stroke-width:2';
+function cup(x,y,s){s=s||1;
+  return `<path d="M${x-7*s} ${y-9*s} h${14*s} l${-2.5*s} ${9*s} h${-9*s}z" fill="#F27C95"/>
+   <circle cx="${x}" cy="${y-12*s}" r="${7.5*s}" fill="#FFE6EE"/><circle cx="${x}" cy="${y-19*s}" r="${2.2*s}" fill="#E5484D"/>`;}
+function person(x,y,c){return `<circle cx="${x}" cy="${y-30}" r="7" style="fill:var(--skin)"/><rect x="${x-8}" y="${y-22}" width="16" height="22" rx="7" fill="${c}"/>`;}
+function awning(x,y,w,h){let o="",n=6,u=w/n;
+  for(let i=0;i<n;i++)o+=`<rect x="${x+i*u}" y="${y}" width="${u}" height="${h}" fill="${i%2?'#FFFFFF':'#F27C95'}"/>`;
+  let d=`M${x} ${y+h}`;for(let i=0;i<n;i++)d+=` q${u/2} ${h*.55} ${u} 0`;
+  return o+`<path d="${d} Z" fill="#F27C95"/>`;}
+function sign(x,y,w,h,txt){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h/3}" style="fill:var(--roof)"/>
+  <text x="${x+w/2}" y="${y+h*0.72}" text-anchor="middle" font-size="${h*0.62}" font-weight="900" fill="#fff" font-family="sans-serif" letter-spacing="1">${txt}</text>`;}
+function kiosk(x){const y=G;
+  return sign(x+32,y-118,76,20,"HALF")+
+   `<rect x="${x+8}" y="${y-92}" width="6" height="50" rx="2" fill="#B08560"/><rect x="${x+126}" y="${y-92}" width="6" height="50" rx="2" fill="#B08560"/>`+
+   awning(x,y-96,140,18)+
+   `<rect x="${x+2}" y="${y-44}" width="136" height="44" rx="6" fill="#E8C9A0" style="${ED}"/><rect x="${x+2}" y="${y-44}" width="136" height="9" rx="4" fill="#D4AE80"/>`+
+   cup(x+40,y-44,1.1)+cup(x+70,y-44,1.1)+cup(x+100,y-44,1.1);}
+function storefront(x,s){const y=G,w=82*s,h=78*s;
+  return `<rect x="${x}" y="${y-h}" width="${w}" height="${h}" rx="${5*s}" style="fill:var(--wall);${ED}"/>`+
+   sign(x+w*0.18,y-h-12*s,w*0.64,15*s,"HALF")+
+   awning(x-3*s,y-h+6*s,w+6*s,12*s)+
+   `<rect x="${x+8*s}" y="${y-h+30*s}" width="${40*s}" height="${30*s}" rx="${3*s}" style="fill:var(--win)"/>`+
+   cup(x+18*s,y-h+57*s,.75*s)+cup(x+36*s,y-h+57*s,.75*s)+
+   `<rect x="${x+55*s}" y="${y-h+34*s}" width="${19*s}" height="${44*s}" rx="${3*s}" fill="#9B6B4A"/><circle cx="${x+70*s}" cy="${y-h+57*s}" r="${1.6*s}" fill="#F7D9A8"/>`;}
+function tower(x,w,floors,fill,label){const fh=14,h=floors*fh+18,y=G;let wins="";
+  const cols=Math.floor((w-10)/13);const off=(w-cols*13+5)/2;
+  for(let f=0;f<floors;f++)for(let c=0;c<cols;c++)wins+=`<rect x="${x+off+c*13}" y="${y-h+10+f*fh}" width="8" height="8" rx="1.5" style="fill:var(--win)"/>`;
+  return `<rect x="${x}" y="${y-h}" width="${w}" height="${h}" rx="5" style="fill:${fill||'var(--wall2)'};${ED}"/>${wins}
+   <rect x="${x+w/2-7}" y="${y-15}" width="14" height="15" rx="2" fill="#9B6B4A"/>`+(label?sign(x+6,y-h-16,w-12,13,label):"");}
+function phone(x){const y=G;
+  return `<rect x="${x}" y="${y-96}" width="52" height="96" rx="10" fill="#2B3036"/><rect x="${x+5}" y="${y-89}" width="42" height="76" rx="5" style="fill:var(--win)"/>
+   <rect x="${x+11}" y="${y-81}" width="30" height="30" rx="8" fill="#F27C95"/>`+cup(x+26,y-56,.9)+
+   `<rect x="${x+10}" y="${y-44}" width="32" height="10" rx="5" style="fill:var(--roof)"/><text x="${x+26}" y="${y-36.5}" text-anchor="middle" font-size="7" font-weight="800" fill="#fff" font-family="sans-serif">주문</text>`;}
+function plane(x,y){return `<path d="M${x} ${y} l58 -17 q10 -3 12 3 q2 6 -8 9 l-56 13z" fill="#FFFFFF" style="${ED}"/><path d="M${x+28} ${y-8} l10 -21 l9 0 l-6 25z" fill="#3182F6"/><path d="M${x+4} ${y-2} l-4 -11 l7 0 l7 9z" fill="#3182F6"/>`;}
+function globe(x,y){return `<circle cx="${x}" cy="${y}" r="22" fill="#9AD8FF"/><path d="M${x-12} ${y-12} q9 5 3 12 q-7 5 -2 12 M${x+5} ${y-19} q7 9 0 15 q-5 7 5 14" fill="none" stroke="#00A36C" stroke-width="6" stroke-linecap="round"/>`;}
+function flag(x,y,txt){return `<line x1="${x}" y1="${y}" x2="${x}" y2="${y-40}" stroke="#8B95A1" stroke-width="3"/><path d="M${x} ${y-40} h44 l-7 9 l7 9 h-44z" fill="#7B61FF"/><text x="${x+19}" y="${y-27.5}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#fff" font-family="sans-serif">${txt}</text>`;}
+const TOWN=[null,
+  ()=>kiosk(56)+person(232,G,"#3182F6")+person(258,G,"#F04452")+person(284,G,"#00A36C")+person(310,G,"#D99A00")+person(334,G,"#7B61FF"),
+  ()=>storefront(24,1)+storefront(139,1)+storefront(254,1),
+  ()=>storefront(18,.82)+storefront(100,.82)+storefront(182,.82)+phone(282),
+  ()=>storefront(16,.66)+storefront(76,.66)+tower(140,80,7,"var(--wall)","HALF 본사")+storefront(232,.66)+storefront(292,.66),
+  ()=>tower(30,58,6)+tower(102,82,9,"var(--wall)","HALF 본사")+tower(198,58,7)+plane(262,62),
+  ()=>tower(14,56,7)+tower(76,50,5)+tower(134,82,9,"var(--wall)","HALF 본사")+tower(224,56,8)+globe(318,92),
+  ()=>tower(14,56,7)+tower(76,50,5)+tower(134,82,9,"var(--wall)","HALF 본사")+tower(224,56,8)+flag(296,120,"새 주인")
+];
+const LV=[null,
+ {y:"1년차",shop:"1개",emp:"5명",rev:"월 3,500만",cap:"줄은 길지만 아직 작은 팝업 가게"},
+ {y:"2년차",shop:"3개",emp:"30명",rev:"월 2.5억",cap:"매장 3곳을 운영하는 동네 인기 브랜드"},
+ {y:"3년차",shop:"8개",emp:"70명",rev:"연 180억",cap:"매장 8곳, 이제 앱을 만들려는 브랜드"},
+ {y:"4년차",shop:"35개",emp:"200명",rev:"연 400억",cap:"본사를 두고 브랜드 셋을 운영하는 회사"},
+ {y:"5년차",shop:"70개",emp:"450명",rev:"연 900억",cap:"국내를 넘어 해외를 바라보는 중견 기업"},
+ {y:"6년차",shop:"120개",emp:"800명",rev:"연 1,400억",cap:"해외 포함 매장 120곳, 매각을 앞둔 회사"},
+ {y:"7년차",shop:"120개",emp:"800명",rev:"연 1,400억",cap:"새 주인을 맞은 회사"}
+];
+function company(lv){const L=LV[lv];
+ return `<div class="co">
+  <div class="co-top"><span class="e" style="font-size:20px">🧁</span>하프 HALF<span class="lvtag">회사 레벨 ${lv}</span></div>
+  <div class="town"><svg viewBox="0 0 360 200">${TOWN[lv]()}<rect x="8" y="${G}" width="344" height="8" rx="4" style="fill:var(--ground)"/></svg></div>
+  <div class="cap">${L.cap}</div>
+  <div class="stats">
+   <div class="stat"><small>매장</small><b>${L.shop}</b></div>
+   <div class="stat"><small>직원</small><b>${L.emp}</b></div>
+   <div class="stat"><small>매출</small><b>${L.rev}</b></div>
+  </div></div>`;}
+const BRAND=`<div class="brand">KUSC 전략 직무 진출 커리큘럼 · Jason Baek</div>`;
+const hud=(lv,label)=>`<div class="hud"><span class="stage"><span class="e">🎮</span>Stage ${lv} / 7</span><span class="yr">${LV[lv].y} · ${label}</span></div>`;
+
+/* ───────── 슬라이드 ───────── */
+const S=[];
+S.push({note:"게임처럼 진행한다고 알린다. 매 장면마다 '누구를 부를까'를 묻고, 손을 들게 한 뒤 공개.",
+html:`<div style="height:100%;display:flex;flex-direction:column;justify-content:center">
+  <div class="stage" style="width:max-content"><span class="e">🎮</span>2강 · 전략 직무 구조화하기</div>
+  <h1 style="margin-top:22px">하프의 7년</h1>
+  <p class="lead" style="margin-top:14px;max-width:640px">성수 팝업에서 시작한 디저트 브랜드가 매각되기까지.<br>회사가 커질 때마다 어떤 직무가 필요해지고, 그들이 실제로 무슨 일을 하는지 함께 겪어봅니다.</p>
+  <div style="display:flex;gap:6px;margin-top:40px">${["VC","PM","BP","CS","PE","IB"].map(k=>`<div style="width:96px">${chr(k)}</div>`).join("")}</div>
+</div>`});
+
+const RO={
+ IB:{one:"큰돈이 오가는 거래를 설계하고 성사시켜요",q:"이 회사, 누가 얼마에 사줄까?"},
+ PE:{one:"회사를 통째로 사서 고친 뒤 다시 팔아요",q:"3~5년 뒤 얼마에 팔 수 있을까?"},
+ VC:{one:"아직 작은 회사의 가능성에 돈을 걸어요",q:"이 팀, 100배가 될 수 있을까?"},
+ CS:{one:"회사 밖의 시선으로 진짜 문제와 답을 찾아요",q:"진짜 문제는 무엇이고, 실현 가능할까?"},
+ BP:{one:"회사 안에서 돈과 사람을 어디에 쓸지 정해요",q:"어디에 넣고, 어디서 뺄까?"},
+ PM:{one:"무엇을 먼저 만들지 정하고 끝까지 책임져요",q:"어떤 숫자를 올려야 할까?"}
+};
+S.push({note:"여섯 캐릭터를 소개. 각자의 핵심 질문만 기억하면 된다. 장면마다 이 질문으로 회사를 본다.",
+html:`<h2>캐릭터 소개</h2><p class="lead" style="margin-top:4px">각자 회사를 볼 때 던지는 핵심 질문이 다릅니다</p>
+<div class="roster">${["VC","PM","BP","CS","PE","IB"].map(k=>`<div class="rc" style="${jv(k)}">${chr(k)}
+ <div class="rc-nick">${J[k].nick}</div><div class="rc-name">${J[k].n}</div>
+ <div class="rc-one">${RO[k].one}</div>
+ <div class="rc-q"><small>핵심 질문</small>${RO[k].q}</div></div>`).join("")}</div>`});
+
+const STG=[["1년차","창업","🧁"],["2년차","첫 투자","💰"],["3년차","앱 출시","📱"],["4년차","조직 확대","👥"],["5년차","해외 진출","✈️"],["6년차","매각 제안","🤝"],["7년차","인수 후 100일","🔑"]];
+const PTS=[[90,330],[260,180],[440,320],[620,170],[800,310],[980,160],[1110,300]];
+S.push({note:"무대 소개. 7년, 일곱 번의 결정적 순간. 매 장면마다 '지금 누구를 불러야 할까'를 먼저 묻는다.",
+html:`<div class="hud"><span class="stage"><span class="e">🗺️</span>월드맵</span><span class="yr">성수 팝업에서 매각까지</span></div>
+<h2>하프는 7년 동안 일곱 번 갈림길에 섭니다</h2>
+<p class="lead" style="margin-top:8px">매 장면마다 먼저 묻겠습니다. 지금 이 회사는 누구를 불러야 할까요?</p>
+<div class="map"><svg class="path" viewBox="0 0 1184 440" preserveAspectRatio="none"><path d="M90 330 C175 330 175 180 260 180 S355 320 440 320 S535 170 620 170 S715 310 800 310 S895 160 980 160 S1045 300 1110 300" fill="none" stroke="var(--line)" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/></svg>
+${STG.map((s,i)=>`<div class="node" style="left:${PTS[i][0]}px;top:${PTS[i][1]}px"><div class="disc e">${s[2]}</div><div class="y">Stage ${i+1} · ${s[0]}</div><div class="t">${s[1]}</div></div>`).join("")}</div>`});
+
+function intro(o){
+ return {note:o.note, html:`${hud(o.lv,o.label)}<div class="body"><div class="scene" style="${jv(o.ans)}">
+  ${company(o.lv)}
+  <div class="right">
+   <div class="sit"><h2>${o.head}</h2><ul>${o.sit.map(s=>`<li>${s}</li>`).join("")}</ul></div>
+   <div class="ask"><h3><span class="e">🤔</span>지금 누구를 부를까요?</h3>
+    <div class="chips">${ORDER.map(k=>`<span class="chip" data-k="${k}" style="${jv(k)}">${face(k)}${chipName(k)}<span class="stamp">정답</span></span>`).join("")}</div>
+    <span class="f" data-reveal="${o.ans}"></span>
+    <div class="why f">${o.why}</div>
+   </div>
+  </div></div></div>`};
+}
+function work(o){
+ const k=o.job;
+ return {note:o.note, html:`${hud(o.lv,o.label)}<div class="body"><div class="work" style="${jv(k)}">
+  <div class="who">${chr(k)}<div class="who-nick">${J[k].nick}</div><div class="who-name">${o.who||J[k].n}</div>${o.side?`<span class="side">${o.side}</span>`:""}
+   <div class="kq"><small>핵심 질문</small><p>${o.q}</p></div></div>
+  <div class="wr">
+   <h3><span class="e">🗂️</span>${o.title}</h3>
+   <div class="steps">${o.steps.map((s,i)=>`<div class="st"><span class="n">${i+1}</span><div><div class="t">${s[0]}</div><div class="d">${s[1]}</div></div></div>`).join("")}</div>
+   <div class="bottom">
+    <div class="bx"><h4><span class="e">🧑‍💻</span>${o.jrLabel||"주니어가 실제로 한 일"}</h4><ul>${o.junior.map(j=>`<li>${j}</li>`).join("")}</ul></div>
+    <div class="bx"><h4><span class="e">🎁</span>획득한 산출물</h4>${o.items.map(i=>`<div class="item"><span class="e">📄</span>${i}</div>`).join("")}</div>
+    <div class="bx res"><h4><span class="e">🏆</span>결과</h4><p>${o.result}</p></div>
+   </div>
+  </div></div></div>`};
+}
+
+/* Stage 1 */
+S.push(intro({lv:1,label:"창업",ans:"NO",head:"줄은 서는데, 남는 게 없다",
+ sit:["성수 팝업 세 번 모두 매진, 첫 상설 매장 오픈","그런데 6개월째 <b>통장 잔고가 줄어든다</b>",
+  "디저트 하나 9,000원 — 팔면 <b>얼마 남는지 아무도 모른다</b>","창업자는 새벽엔 굽고, 밤엔 엑셀을 붙잡는다"],
+ why:"<span>이 단계엔 직무가 없습니다. <b>창업자가 전략이고 기획이고 운영</b>입니다.</span>",
+ note:"VC나 컨설팅을 고르는 학생이 꽤 나온다. 컨설팅은 몇 달치 인건비가 자문료로 나가고, VC는 설명할 숫자가 없어 몸값만 깎인다. '직무 구분은 회사가 커져야 생깁니다.'"}));
+S.push(work({lv:1,label:"창업",job:"NO",title:"창업자가 직접 한 일",q:"하나 팔면 실제로 얼마가 남나?",jrLabel:"창업자가 직접 챙긴 일",
+ steps:[["메뉴별 원가 분해","메뉴 12개의 재료비·포장비를 계산하고, 임대료·인건비를 판매량 기준으로 나눔"],
+  ["손해 메뉴 발견","가장 많이 팔리던 두 메뉴가 개당 400원씩 손해임을 확인함"],
+  ["메뉴 구조 조정","손해 메뉴 2개를 단종하고, 마진이 높은 세트 구성을 새로 만듦"],
+  ["가격·포장 변경","가격을 1,000원 올리고 포장 단위를 바꿔 포장비를 줄임"],
+  ["효과 검증","석 달간 메뉴별 판매량과 마진을 매주 다시 계산함"]],
+ junior:["영수증과 매출 내역을 엑셀로 직접 정리함","공동창업 셰프와 레시피별 재료량을 재측정함","단골 손님에게 가격 인상 반응을 직접 물어봄","매주 일요일 밤 주간 손익을 정리함"],
+ items:["메뉴별 원가표","판매량·마진 분석표","메뉴·가격 조정안","주간 손익 시트"],
+ result:"같은 매출로 남는 돈이 늘어 석 달 만에 첫 월 흑자 전환. 투자자에게 보여줄 숫자가 처음 생김",
+ note:"'처음엔 한 사람이 다 합니다. 가장 먼저 붙잡을 질문은 한 개 팔면 얼마 남나입니다.' 1부의 축제 부스 정산과 연결."}));
+
+/* Stage 2 */
+S.push(intro({lv:2,label:"첫 투자",ans:"VC",head:"더 크려면 돈이 필요하다",
+ sit:["한 번 온 손님의 <b>60%가 다시 온다</b>","4호점과 생산시설에 <b>40억</b>이 필요한데, 통장엔 7개월치뿐",
+  "경쟁 브랜드 두 곳이 투자를 받고 매장을 늘리는 중"],
+ why:"<span>증명은 덜 됐지만 <b>성장 가능성에 돈을 거는 건 VC의 일</b>입니다.</span>",
+ note:"은행은 담보·흑자 이력이 짧아 큰돈을 안 빌려주고, PE는 이미 현금을 잘 버는 회사를 산다. PE를 고르는 학생이 나오면 '6번째 장면에서 나옵니다'로 넘긴다."}));
+S.push(work({lv:2,label:"첫 투자",job:"VC",title:"VC가 들어와서 하는 일",q:"손님이 다시 오는 비율, 시간이 지나도 유지되나?",
+ steps:[["첫 미팅","창업자와 한 시간 미팅으로 팀·시장·성장 이야기를 확인함. 대부분 여기서 탈락함"],
+  ["예비 검토","디저트 시장 규모, 경쟁 브랜드, 창업팀 이력을 빠르게 검토함"],
+  ["실사","판매 데이터로 처음 온 달별 재방문율(코호트)과 매장별 손익을 분석함"],
+  ["투자심의위원회","심사역이 파트너들 앞에서 투자 논리를 발표하고 반대 질문에 답함"],
+  ["조건 협상","투자금 50억, 지분율, 창업자 이탈 시 조건 등을 계약서에 반영함"],
+  ["투자 후 지원","이사회에 참석하고, 핵심 인재 채용과 다음 투자자 연결을 도움"]],
+ junior:["한 달 30~40곳 스타트업 미팅과 회의록 작성","판매 데이터 정리와 코호트 표 제작","경쟁 브랜드 5곳 매장 수·가격·리뷰 비교","투자 검토 보고서 초안 작성"],
+ items:["투자 검토 보고서","코호트·매장 손익 분석","투자 조건서(텀시트)","투자 계약서"],
+ result:"시리즈 A 50억 원 유치. 4호점과 생산시설 투자 재원을 확보해 매장이 3개에서 8개로 늘어남",
+ note:"'VC가 본 건 작년 이익이 아니라 사람들이 다시 오느냐였습니다. 지금 이익을 보는 건 다른 직무입니다.'"}));
+
+/* Stage 3 */
+S.push(intro({lv:3,label:"앱 출시",ans:"PM",head:"앱을 만들기로 했다. 그런데 뭐부터?",
+ sit:["주말 대기 줄 40분, 기다리다 돌아가는 손님이 하루 수십 명","부서마다 원하는 기능을 모았더니 <b>30개</b>",
+  "개발자는 4명, <b>6개월 안에</b> 출시해야 한다"],
+ why:"<span>30개를 다 만들면 아무것도 안 됩니다. <b>무엇을 먼저 만들지 정하고 책임질 사람</b>이 필요합니다.</span>",
+ note:"사업기획이나 컨설팅을 고르는 학생이 있으면, 그들은 '무엇을 만들지'는 정하지 않는다고 구분."}));
+S.push(work({lv:3,label:"앱 출시",job:"PM",title:"PM이 들어와서 하는 일",q:"이 앱이 성공했다는 걸 어떤 숫자로 알 수 있나?",
+ steps:[["문제 재정의","'앱 만들기'가 아니라 '대기 때문에 돌아가는 손님'이 진짜 문제임을 정의함"],
+  ["사용자 인터뷰","대기 손님 20명, 단골 10명을 만나 포기한 순간의 경험을 들음"],
+  ["우선순위 결정","30개 기능을 효과×개발 기간으로 나열하고, 1차는 '미리 주문·픽업' 하나로 좁힘"],
+  ["기획서 작성","화면 흐름, 재고 소진·결제 실패 같은 예외 상황, 성공 지표를 문서화함"],
+  ["출시까지 조율","개발·디자인과 매일 회의하고 매장 교육과 출시 이벤트 일정을 맞춤"],
+  ["출시 후 개선","픽업 비율·대기 이탈률·재주문율을 매주 보고 다음 기능을 결정함"]],
+ junior:["매장 앞 대기 손님 인터뷰와 정리","부서별 기능 요청 30개 정리와 근거 확인","결제 실패·재고 소진 예외 시나리오 작성","매일 아침 지표 확인과 이상치 보고"],
+ items:["사용자 인터뷰 리포트","기능 우선순위표","기획서(PRD)","출시 후 지표 리포트"],
+ result:"4개월 만에 픽업 기능 하나로 출시. 3개월 뒤 대기 이탈 60% 감소, 전체 주문의 35%가 앱으로 이동함",
+ note:"'PM이 한 가장 큰 일은 30개 중 29개를 안 만들기로 한 겁니다. 1강에서 전략의 본질은 무엇을 하지 않을지 정하는 거라고 했죠.'"}));
+
+/* Stage 4 */
+S.push(intro({lv:4,label:"조직 확대",ans:"BP",head:"사람은 늘었는데, 다들 싸운다",
+ sit:["매출 400억인데 <b>영업적자 30억</b>","마케팅 — \"음료가 뜬다, 광고비를 몰아달라\"",
+  "매장 — \"인력이 부족해 서비스가 무너진다\"","생산 — \"증설 안 하면 내년 물량 못 맞춘다\""],
+ why:"<span>매년 반복되는 예산 싸움이라, <b>안에서 계속 배분하고 조율할 사람</b>이 필요합니다.</span>",
+ note:"컨설팅을 고르는 학생이 많이 나올 장면. 컨설팅이 구조를 진단해 줄 수는 있지만, 매년 반복되는 배분과 조율은 회사 안에 있는 사람의 일. '일회성이냐 매년이냐'로 구분."}));
+S.push(work({lv:4,label:"조직 확대",job:"BP",title:"사업기획이 들어와서 하는 일",q:"어느 사업에 얼마를 넣고, 어디서 뺄 것인가?",
+ steps:[["손익 분리","회사 전체로만 보던 숫자를 브랜드별·매장별 손익으로 처음 분리함"],
+  ["원인 진단","음료는 적자의 절반을 차지하고, 디저트는 흑자인데 인력 부족으로 성장이 막혀 있음을 확인함"],
+  ["배분안 수립","음료 광고비를 줄이고 디저트 인력과 생산시설에 우선 배분하는 예산안을 만듦"],
+  ["부서별 설득","마케팅엔 '손익 개선 후 재투자', 매장팀엔 '증원만큼 서비스 지표 약속'을 조건으로 설득함"],
+  ["KPI 설정","부서별 매출·이익·고객 만족 목표를 확정하고 월별 점검 체계를 만듦"],
+  ["월간 관리","계획과 실적이 다르면 원인을 찾고 예산을 다시 조정함"]],
+ junior:["회계팀과 2주간 브랜드별 손익 데이터 정리","주간 경영회의 자료와 회의록 작성","부서별 예산 요청 근거 인터뷰","월별 실적 취합과 계획 대비 차이 분석"],
+ items:["브랜드·매장별 손익 분석","연간 사업계획","부서별 예산안","KPI 관리 체계"],
+ result:"1년 뒤 영업적자 30억에서 흑자로 전환. 경영회의가 '누가 더 큰 소리를 내느냐'에서 '숫자가 어떻게 나왔느냐'로 바뀜",
+ note:"'논리가 완벽한 예산안도, 부서마다 걱정하는 게 뭔지 맞춰 말하지 않으면 통과가 안 됩니다. 사업기획 일의 절반이 이겁니다.' 1부 10번 문항과 연결."}));
+
+/* Stage 5 */
+S.push(intro({lv:5,label:"해외 진출",ans:"CS",head:"국내는 다 먹었다. 해외는 아무도 모른다",
+ sit:["성장률이 30%에서 <b>8%</b>로 — 서울엔 더 낼 자리가 없다","이사회 — \"동남아로 가야 한다\"",
+  "회사 안에 <b>해외 사업을 해본 사람이 없다</b>","가자는 쪽과 위험하다는 쪽, <b>의견만 엇갈리고 판단 근거가 없다</b>"],
+ why:"<span>회사 안에 없는 해외 경험과 검증된 방법론으로, <b>이 진출이 정말 실현 가능한지 객관적으로 판단</b>하기 위해 부릅니다.</span>",
+ note:"컨설팅을 부르는 이유 세 가지 — 전문성: 내부에 없는 해외 시장 경험과 방법론. 객관성: 내부의 기대나 부서 이해관계에서 독립된 판단. 집중: 본업과 분리된 전담 팀이 12주간 몰입. 최종 결정은 이사회가 내리지만, 그 결정이 설 수 있는 근거를 만드는 게 컨설팅."}));
+S.push(work({lv:5,label:"해외 진출",job:"CS",title:"컨설팅이 들어와서 하는 일 · 12주",q:"이 진출, 정말 실현 가능한가?",
+ steps:[["1~2주 · 문제 정의","'해외로 갈까'를 '어디에, 어떤 방식으로, 언제 가야 3년 안에 흑자인가'로 구조화함"],
+  ["3~5주 · 국가 선별","동남아 6개국을 시장 규모·소비 성향·인지도·임대료·규제로 비교해 3개 도시로 좁힘"],
+  ["6~8주 · 현장 조사","방콕·싱가포르·호치민 상권을 답사하고 현지 관계자 30명을 인터뷰함"],
+  ["9~10주 · 진입 방식 비교","직영·현지 합작·프랜차이즈의 투자금·리스크·통제력을 비교함"],
+  ["11주 · 사업성 분석","도시·방식별 3년 손익을 추정하고, 가정이 틀렸을 때의 시나리오를 검증함"],
+  ["12주 · 최종 제안","'방콕, 현지 합작, 첫해 3개 매장'을 실행 로드맵과 함께 이사회에 제안함"]],
+ junior:["6개국 시장·경쟁 데이터 수집과 비교표 작성","현지 인터뷰 30건 섭외와 인터뷰 노트 정리","3년 손익 추정 엑셀 모델 제작","보고서 장표 작성과 매일 피드백 반영"],
+ items:["시장 진입 전략 보고서","국가별 비교 분석","사업성 분석 모델","실행 로드맵"],
+ result:"이사회가 보고서를 근거로 방콕 현지 합작 진출을 결정함. 첫해 3개 매장으로 시작해 리스크를 통제하는 방식 채택",
+ note:"'컨설턴트가 가장 많이 듣는 말이 그래서 뭐?입니다. 데이터를 다 모아 왔는데 결론이 없으면 돌려받습니다.' 1부의 정리와 해석의 차이와 연결."}));
+
+/* Stage 6 */
+S.push({note:"이번엔 세 직무가 동시에 등장. 먼저 '누가 누구 편일까'를 묻는다.",
+html:`${hud(6,"매각 제안")}<div class="body"><div class="scene">${company(6)}
+ <div class="right"><div class="sit"><h2>사모펀드가 회사를 사겠다고 한다</h2><ul>
+  <li>영업이익 <b>120억</b>, 이제 안정적으로 현금을 번다</li><li>2년차에 투자한 VC는 <b>돈을 돌려받아야</b> 한다</li>
+  <li>창업자도 7년을 쉬지 않고 달려 지쳤다</li><li>사모펀드 한 곳이 <b>인수 의향서</b>를 보냈다</li></ul></div>
+ <div class="ask"><h3><span class="e">🧩</span>이번엔 세 명이 동시에 들어옵니다</h3>
+  <div class="chips">${["IB","PE","CS"].map(k=>`<span class="chip" style="${jv(k)}">${face(k)}${J[k].n}</span>`).join("")}</div>
+  <div class="why" style="--jbg:var(--soft)"><span>각자 <b style="color:var(--ink)">누구 편</b>에 설까요? 매도자 편 · 매수자 편 · 매수자가 고용한 검증팀</span></div>
+ </div></div></div></div>`});
+S.push({note:"하나씩 공개. 재무 실사는 회계법인, 법률 실사는 로펌이 맡는다는 것도 덧붙인다.",
+html:`${hud(6,"매각 제안")}<h2>누가 누구 편인가</h2>
+ <div class="sides">${[["IB","매도자 편","창업자와 VC가 고용. 여러 곳을 경쟁시켜 최고 가격을 받아냄"],
+   ["PE","매수자 편","직접 사는 쪽. 실사를 지휘하고 가격을 정함"],
+   ["CS","매수자가 고용한 검증팀","매도자가 보여준 성장 계획이 맞는지 독립적으로 검증함"]].map(r=>`
+  <div class="sc" style="${jv(r[0])}">${chr(r[0])}<div class="sc-n">${J[r[0]].n}</div>
+   <div class="sc-q">?<div class="f">${r[1]}</div></div><div class="sc-d f">${r[2]}</div></div>`).join("")}</div>
+ <p class="foot f">거래 하나에 IB, PE, 컨설팅, 회계법인, 로펌까지 수십 명이 움직입니다</p>`});
+S.push(work({lv:6,label:"매각 제안",job:"IB",side:"매도자 편",title:"IB가 하는 일",q:"누가 가장 비싸게, 가장 확실하게 사줄 것인가?",
+ steps:[["가치 산정","비슷한 회사의 거래 가격과 앞으로 벌어들일 현금을 바탕으로 회사 가치 범위를 계산함"],
+  ["매수 후보 발굴","사모펀드 15곳, 식품 대기업 5곳의 인수 여력과 관심도를 분석해 리스트를 만듦"],
+  ["회사 소개 자료","한 장짜리 티저를 돌리고, 비밀유지 약정을 맺은 곳에만 투자설명서를 제공함"],
+  ["입찰 진행","예비입찰로 4~5곳을 추리고, 실사 기회를 준 뒤 본입찰에서 최종 가격을 받음"],
+  ["협상과 계약","우선협상대상자를 정하고 가격·고용 승계·창업자 조건을 끝까지 협상함"]],
+ junior:["가치평가 엑셀 모델 작성과 시나리오 업데이트","투자설명서 수십 쪽 작성과 수정","매수 후보 연락과 질의응답 관리","실사 자료실 문서 수백 건 정리"],
+ items:["티저","투자설명서(IM)","가치평가 보고서","입찰 안내서"],
+ result:"세 곳이 본입찰에 참여. 경쟁 구도를 만들어 단독 협상보다 높은 가격 조건을 이끌어냄",
+ note:"'IB는 거래가 성사돼야 돈을 받습니다. 그래서 끝까지 경쟁을 붙입니다.'"}));
+S.push(work({lv:6,label:"매각 제안",job:"PE",side:"매수자 편",title:"PE가 하는 일",q:"3~5년 뒤 얼마에 팔 수 있나? 그 사이 이자를 감당할 수 있나?",
+ steps:[["투자 가설","원가 개선, 해외 사업 정리, 추가 출점 등 인수 후 가치를 올릴 방법을 정리함"],
+  ["실사 지휘","사업은 컨설팅, 재무는 회계법인, 법률은 로펌에 맡기고 결과를 취합함"],
+  ["가격 결정","인수 대금 일부를 빌리므로, 회사가 버는 현금으로 이자를 갚을 수 있는지 계산함"],
+  ["투자위원회","펀드 내부에서 '왜 이 가격에 사야 하는가'를 설득하고 승인을 받음"],
+  ["인수 계약","가격, 창업자 잔류 여부, 경영진 보상 구조를 계약서에 반영함"]],
+ junior:["디저트·F&B 산업 리서치","인수금융을 포함한 투자 모델 작성","세 실사팀 결과 취합과 쟁점 정리","투자위원회 보고서 작성"],
+ items:["투자 가설 메모","인수 모델","투자위원회 보고서","인수 계약서"],
+ result:"실사 결과를 반영해 가격을 조정한 뒤 인수 결정. 인수 후 100일 계획까지 미리 수립함",
+ note:"'2년차 VC는 사람들이 다시 오느냐를 봤습니다. PE는 지금 버는 현금을 봅니다. 같은 회사인데 보는 숫자가 다릅니다.'"}));
+S.push(work({lv:6,label:"매각 제안",job:"CS",side:"매수자가 고용한 검증팀",title:"컨설팅이 하는 일 · 상업 실사 4~6주",q:"매도자가 보여준 성장 계획, 믿어도 되나?",
+ steps:[["시장 검증","디저트 시장이 매도자가 말한 속도로 성장하는지 외부 데이터로 확인함"],
+  ["경쟁력 검증","고객 1,000명 설문과 경쟁사 비교로 재방문율·가격 경쟁력의 우위를 검증함"],
+  ["사업계획 검증","매도자가 제시한 5년 매출 계획의 가정을 하나씩 재계산함"],
+  ["리스크 도출","해외 8개 매장 중 5곳이 아직 적자이며, 계획이 낙관적임을 짚어냄"],
+  ["결과 보고","PE 투자위원회에 '인수 여부와 적정 가격'의 근거를 제공함"]],
+ junior:["고객 설문 설계와 응답 분석","경쟁사 매장 방문 조사","사업계획 가정 재계산 모델 작성","실사 보고서 장표 작성"],
+ items:["상업 실사 보고서","고객 설문 분석","사업계획 검증 모델"],
+ result:"해외 사업 리스크가 확인되어 최초 제시 가격보다 낮은 수준에서 거래가 성사됨",
+ note:"5년차 해외 진출 때 들어온 컨설팅과 비교. 그땐 회사가 불렀고, 지금은 사는 쪽이 불렀다. 같은 컨설팅이 누가 부르느냐에 따라 다른 질문을 받는다."}));
+S.push({note:"'같은 회사를 두고 IB는 팔릴까를, PE는 사도 될까를, 컨설팅은 믿어도 될까를 묻습니다. 그리고 이 셋은 다음 거래에서 서로를 다시 부릅니다.'",
+html:`${hud(6,"매각 완료")}<h2>같은 회사, 세 개의 질문</h2>
+ <div class="trio">${[["IB","파는 쪽","팔릴까?"],["PE","사는 쪽","사도 될까?"],["CS","검증하는 쪽","믿어도 될까?"]].map(r=>`
+  <div class="tq" style="${jv(r[0])}">${chr(r[0])}<small>${J[r[0]].n} · ${r[1]}</small><p>${r[2]}</p></div>`).join("")}</div>
+ <div style="text-align:center"><div class="banner f"><span class="e">🎉</span>사모펀드에 매각 · 2년차 VC는 투자금의 8배 회수</div></div>`});
+
+/* Stage 7 */
+S.push({note:"마지막 장면. 이번엔 안과 밖이 함께 움직인다.",
+html:`${hud(7,"인수 후 100일")}<div class="body"><div class="scene">${company(7)}
+ <div class="right"><div class="sit"><h2>새 주인이 왔다. 100일 안에 무엇을 바꿀까</h2><ul>
+  <li>창업자는 대표 자리를 전문경영인에게 넘겼다</li><li>사모펀드는 3~5년 뒤 <b>다시 팔아야</b> 한다</li>
+  <li>인수 때 빌린 돈의 이자가 <b>매년 수십억</b></li><li>직원들은 불안하다 — "구조조정 하는 거 아냐?"</li></ul></div>
+ <div class="ask"><h3><span class="e">🤝</span>이번엔 안과 밖이 함께 움직입니다</h3>
+  <div class="chips">${["PE","BP"].map(k=>`<span class="chip" style="${jv(k)}">${face(k)}${J[k].n}</span>`).join("")}</div>
+  <div class="why" style="--jbg:var(--soft)"><span>밖에서 <b style="color:var(--ink)">방향을 정하는 사람</b>, 안에서 <b style="color:var(--ink)">그걸 굴러가게 만드는 사람</b></span></div>
+ </div></div></div></div>`});
+const dsteps=a=>`<div class="steps">${a.map((s,i)=>`<div class="st"><span class="n">${i+1}</span><div><div class="t">${s[0]}</div><div class="d">${s[1]}</div></div></div>`).join("")}</div>`;
+S.push({note:"'밖에서 온 사람은 방향을 정하고, 안에 있는 사람은 그걸 실제로 굴러가게 만듭니다. 1강의 인하우스 vs 컨설팅 표가 이 장면입니다.' 결과 배너까지 공개.",
+html:`${hud(7,"인수 후 100일")}<div class="body" style="height:540px"><div class="duo">
+ <div class="dc" style="${jv("PE")}"><div class="dc-top">${chr("PE")}<div><div class="dc-s">밖에서 방향을 정함</div><div class="dc-n">PE</div></div></div>
+  <div class="kq"><small>핵심 질문</small><p>100일 안에 숫자로 보여줄 변화는?</p></div>
+  ${dsteps([["100일 계획","원가 절감, 적자 매장 정리, 수익성 높은 지역 집중 출점 계획을 수립함"],["경영진 정비","재무책임자를 영입하고 경영진 보상을 회사 가치와 연결함"],["이사회 운영","매월 현금흐름과 이익률 중심으로 실적을 점검함"],["다음 매각 준비","3~5년 뒤 매각 대상과 시점을 처음부터 염두에 둠"]])}</div>
+ <div class="dc" style="${jv("BP")}"><div class="dc-top">${chr("BP")}<div><div class="dc-s">안에서 실행 가능하게 만듦</div><div class="dc-n">사업기획</div></div></div>
+  <div class="kq"><small>핵심 질문</small><p>이 목표를 우리 부서가 해낼 일로 바꾸면?</p></div>
+  ${dsteps([["번역","'원가 5% 절감'을 부서별 실행 과제와 일정으로 쪼갬"],["조율","매장 정리에 반대하는 해외팀, 거래처를 걱정하는 구매팀을 설득함"],["보고 체계","새 주인이 원하는 형식으로 월별 보고서를 재설계함"],["내부 소통","무엇이 바뀌고 무엇이 유지되는지 직원 안내 자료를 만듦"]])}</div>
+ </div></div>
+ <div style="text-align:center"><div class="banner f" style="margin-top:14px"><span class="e">📈</span>1년 만에 이익률 8% → 12% · 3년 뒤 식품 대기업에 재매각</div></div>`});
+
+/* 시간 지도 */
+const TL=[["1년차","창업","🧁",["NO"]],["2년차","첫 투자","💰",["VC"]],["3년차","앱 출시","📱",["PM"]],["4년차","조직 확대","👥",["BP"]],["5년차","해외 진출","✈️",["CS"]],["6년차","매각","🤝",["IB","PE","CS"]],["7년차","인수 후 100일","🔑",["PE","BP"]]];
+S.push({note:"'1강의 사분면이 공간의 지도였다면, 이건 시간의 지도입니다.'",
+html:`<div class="hud"><span class="stage"><span class="e">🏁</span>클리어</span><span class="yr">하프의 7년</span></div>
+ <h2>시간의 지도</h2><p class="lead" style="margin-top:4px">1강의 사분면이 공간의 지도였다면, 이건 언제 누가 등장하는지의 지도입니다</p>
+ <div class="tl">${TL.map(t=>`<div class="tn"><div class="disc e">${t[2]}</div><div class="y">${t[0]}</div><div class="t">${t[1]}</div>
+  <div class="ppl">${t[3].map(k=>face(k)).join("")}</div><div class="nm">${t[3].map(k=>J[k].n).join(" · ")}</div></div>`).join("")}</div>`});
+
+/* 마지막 — 열린 질문 */
+S.push({note:"답을 받지 않는다. 각자 생각해 보라고 던지고 끝낸다. 다음 시간 현직자에게 물을 질문을 정리해 오라고 안내.",
+html:`<div class="hud"><span class="stage"><span class="e">💭</span>생각해 볼 것</span></div>
+ <h2>하고 싶은 게 달라졌나요?</h2>
+ <div class="oq">
+  <div class="oqc"><span class="e">🎯</span><div><p>1강에서 고른 직무는 몇 년차에 등장했나요?</p><span>그 장면에서 하는 일이, 생각했던 그 일이었나요?</span></div></div>
+  <div class="oqc"><span class="e">🙋</span><div><p>"내가 저 자리였으면" 싶었던 장면은?</p><span>반대로, 가장 끌리지 않았던 자리는 어디였고 왜였나요?</span></div></div>
+  <div class="oqc"><span class="e">🔄</span><div><p>달라졌다면, 무엇이 달라졌나요?</p><span>그대로라면 무엇이 그 확신을 줬나요? 더 헷갈린다면 어디서부터였나요?</span></div></div>
+  <div class="oqc"><span class="e">🎤</span><div><p>다음 시간에 오실 현직자분들께 무엇을 묻고 싶나요?</p><span>직무별 현직자에게 꼭 물어보고 싶은 질문을 미리 정리해 오세요.</span></div></div>
+ </div>
+ <div style="display:flex;justify-content:center;gap:12px;margin-top:18px">${["VC","PM","BP","CS","PE","IB"].map(k=>`<div style="width:86px">${chr(k)}</div>`).join("")}</div>`});
+
+/* ───────── 조작 ───────── */
+const C=document.getElementById("canvas");
+C.innerHTML=S.map((s,i)=>`<section class="slide" data-i="${i}">${BRAND}${s.html}</section>`).join("");
+const SL=[...C.querySelectorAll(".slide")];
+let cur=0,noteOn=false;
+function fit(){const s=Math.min(innerWidth/1320,innerHeight/760);C.style.transform=`scale(${s})`;}
+addEventListener("resize",fit);fit();
+const frags=i=>[...SL[i].querySelectorAll(".f")];
+const resetChips=sl=>sl.querySelectorAll(".chip").forEach(c=>c.classList.remove("win","lose"));
+function applyReveal(f,sl){const k=f.dataset.reveal;if(!k)return;sl.querySelectorAll(".chip").forEach(c=>c.classList.add(c.dataset.k===k?"win":"lose"));}
+function show(i,fromBack){
+  cur=Math.max(0,Math.min(SL.length-1,i));
+  SL.forEach((s,k)=>s.classList.toggle("on",k===cur));
+  const sl=SL[cur],fs=frags(cur);resetChips(sl);
+  fs.forEach(f=>f.classList.toggle("in",!!fromBack));
+  if(fromBack)fs.forEach(f=>applyReveal(f,sl));
+  document.querySelector("#bar i").style.width=(cur/(SL.length-1)*100)+"%";
+  document.getElementById("num").textContent=(cur+1)+" / "+SL.length;
+  const n=document.getElementById("note");
+  n.innerHTML=S[cur].note?"<b>발표 노트</b>"+S[cur].note:"";
+  n.style.display=noteOn&&S[cur].note?"block":"none";
+  history.replaceState(null,"","#"+(cur+1));
+}
+function next(){const sl=SL[cur],f=frags(cur).find(x=>!x.classList.contains("in"));
+  if(f){f.classList.add("in");applyReveal(f,sl);return}if(cur<SL.length-1)show(cur+1);}
+function prev(){const fs=frags(cur).filter(x=>x.classList.contains("in"));
+  if(fs.length){const f=fs[fs.length-1];f.classList.remove("in");if(f.dataset.reveal)resetChips(SL[cur]);return}
+  if(cur>0)show(cur-1,true);}
+addEventListener("keydown",e=>{
+  if(["ArrowRight","ArrowDown"," ","PageDown","Enter"].includes(e.key)){e.preventDefault();next()}
+  else if(["ArrowLeft","ArrowUp","PageUp","Backspace"].includes(e.key)){e.preventDefault();prev()}
+  else if(e.key==="Home")show(0);else if(e.key==="End")show(SL.length-1,true);
+  else if(e.key.toLowerCase()==="n"){noteOn=!noteOn;show(cur,true)}
+  else if(e.key.toLowerCase()==="f"){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>{});}
+});
+document.getElementById("viewport").addEventListener("click",e=>{(e.clientX>innerWidth*0.3)?next():prev();});
+let tx=null;
+addEventListener("touchstart",e=>tx=e.touches[0].clientX,{passive:true});
+addEventListener("touchend",e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)(d<0?next():prev());tx=null},{passive:true});
+show((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
